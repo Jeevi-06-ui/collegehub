@@ -1,0 +1,29 @@
+{
+  "name": "collegehub",
+  "version": "1.0.0",
+  "private": true,
+  "description": "CollegeHub - College Discovery and Decision-Making Platform",
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev --workspace backend\" \"npm run dev --workspace frontend\"",
+    "build": "npm run build --workspace frontend",
+    "start": "concurrently \"npm run start --workspace backend\" \"npm run start --workspace frontend\"",
+    "seed": "npm run seed --workspace backend",
+    "typecheck": "npm run typecheck --workspace frontend"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  },
+  "overrides": {
+    "postcss": "^8.5.10",
+    "next@15.5.18": {
+      "postcss": "^8.5.10"
+    }
+  },
+  "engines": {
+    "node": ">=20.11.0"
+  }
+}
