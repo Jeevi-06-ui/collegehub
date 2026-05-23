@@ -103,7 +103,55 @@ POST /api/save/college
 POST /api/save/comparison
 ```
 
+Predictor and discussions:
+
+```txt
+POST /api/predictor
+GET  /api/questions
+POST /api/questions
+GET  /api/questions/:id
+POST /api/questions/:id/answer
+```
+
 `GET /api/colleges` supports `search`, `location`, `minFees`, `maxFees`, `rating`, `course`, `sortBy`, `sortOrder`, `page`, and `limit`.
+
+## Testing New Features
+
+Run the seed script after pulling these changes so existing colleges receive optional cutoff data:
+
+```bash
+npm run seed
+```
+
+Predictor:
+
+```txt
+Open /predictor
+Select KCET, COMEDK, or JEE
+Enter a rank such as 12000
+Click Get recommendations
+```
+
+Discussions:
+
+```txt
+Open /discussions
+Login with demo@collegehub.dev / Password123
+Post a question
+Open the discussion detail page
+Post an answer
+```
+
+Existing regression checks:
+
+```txt
+/login
+/signup
+/colleges
+/colleges/:id
+/compare
+/saved
+```
 
 ## Scripts
 

@@ -1,6 +1,17 @@
 "use client";
 
-import { Bookmark, GraduationCap, LogOut, Menu, Scale, Search, UserRound, X } from "lucide-react";
+import {
+  Bookmark,
+  Calculator,
+  GraduationCap,
+  LogOut,
+  Menu,
+  MessageSquare,
+  Scale,
+  Search,
+  UserRound,
+  X
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -10,7 +21,9 @@ import { useAuth } from "@/components/providers/auth-provider";
 
 const links = [
   { href: "/colleges", label: "Colleges", icon: Search },
+  { href: "/predictor", label: "Predictor", icon: Calculator },
   { href: "/compare", label: "Compare", icon: Scale },
+  { href: "/discussions", label: "Discuss", icon: MessageSquare },
   { href: "/saved", label: "Saved", icon: Bookmark }
 ];
 

@@ -10,6 +10,8 @@ import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
 import authRoutes from "./routes/authRoutes.js";
 import collegeRoutes from "./routes/collegeRoutes.js";
 import compareRoutes from "./routes/compareRoutes.js";
+import predictorRoutes from "./routes/predictorRoutes.js";
+import questionRoutes from "./routes/questionRoutes.js";
 import saveRoutes from "./routes/saveRoutes.js";
 
 const app = express();
@@ -57,6 +59,8 @@ app.get("/api/health", (_req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/colleges", collegeRoutes);
 app.use("/api/compare", compareRoutes);
+app.use("/api/predictor", predictorRoutes);
+app.use("/api/questions", questionRoutes);
 app.use("/api/save", saveRoutes);
 
 app.use(notFound);

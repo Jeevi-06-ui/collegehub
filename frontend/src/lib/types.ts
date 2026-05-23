@@ -30,6 +30,11 @@ export type College = {
     highestPackage: number;
     topRecruiters: string[];
   };
+  cutoffs?: {
+    KCET?: number;
+    COMEDK?: number;
+    JEE?: number;
+  };
   reviews: Review[];
   createdAt: string;
   updatedAt?: string;
@@ -125,4 +130,48 @@ export type ComparisonResponse = {
     highestRating: SavedComparison["snapshot"][number];
     strongestPlacement: SavedComparison["snapshot"][number];
   };
+};
+
+export type Exam = "KCET" | "COMEDK" | "JEE";
+
+export type PredictorResponse = {
+  success: boolean;
+  exam: Exam;
+  rank: number;
+  total: number;
+  data: CollegeSummary[];
+};
+
+export type DiscussionUser = {
+  _id: string;
+  name: string;
+  email: string;
+};
+
+export type Answer = {
+  _id: string;
+  text: string;
+  user: DiscussionUser;
+  createdAt: string;
+};
+
+export type Question = {
+  _id: string;
+  title: string;
+  description: string;
+  user: DiscussionUser;
+  answers: Answer[];
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type QuestionListResponse = {
+  success: boolean;
+  data: Question[];
+  pagination: Pagination;
+};
+
+export type QuestionDetailResponse = {
+  success: boolean;
+  question: Question;
 };

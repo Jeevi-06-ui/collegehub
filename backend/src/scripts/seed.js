@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { connectDB } from "../config/db.js";
 import { College } from "../models/College.js";
+import { Question } from "../models/Question.js";
 import { User } from "../models/User.js";
 
 const campusImages = [
@@ -154,6 +155,15 @@ const buildCourses = (courseNames, baseFees) =>
     fee: Math.round(baseFees * (0.82 + index * 0.08))
   }));
 
+const buildCutoffs = (rating, index) => {
+  const strength = Math.max(0, Math.round((5 - rating) * 12000));
+  return {
+    KCET: 2500 + strength + index * 650,
+    COMEDK: 1800 + Math.round(strength * 0.8) + index * 520,
+    JEE: 9000 + Math.round(strength * 1.6) + index * 1100
+  };
+};
+
 const buildCollege = (row, index) => {
   const [name, city, state, fees, rating, averagePackage, highestPackage, courseNames] = row;
   const recruiterPool = recruiterPools[index % recruiterPools.length];
@@ -175,6 +185,7 @@ const buildCollege = (row, index) => {
       highestPackage,
       topRecruiters: recruiterPool
     },
+    cutoffs: buildCutoffs(rating, index),
     reviews: reviews.map((review, reviewIndex) => ({
       ...review,
       rating: Math.min(5, Number((review.rating + (rating - 4.1) * 0.25 - reviewIndex * 0.05).toFixed(1)))
@@ -185,12 +196,12 @@ const buildCollege = (row, index) => {
 const seed = async () => {
   await connectDB();
 
-  await Promise.all([College.deleteMany({}), User.deleteMany({})]);
+  await Promise.all([College.deleteMany({}), Question.deleteMany({}), User.deleteMany({})]);
 
   const colleges = await College.insertMany(rows.map(buildCollege));
   const savedColleges = colleges.slice(0, 3).map((college) => college._id);
 
-  await User.create({
+  const demoUser = await User.create({
     name: "Demo Student",
     email: "demo@collegehub.dev",
     password: "Password123",
@@ -213,7 +224,34 @@ const seed = async () => {
     ]
   });
 
-  console.log(`Seeded ${colleges.length} colleges and demo user demo@collegehub.dev / Password123`);
+  await Question.insertMany([
+    {
+      title: "How should I choose between placements and fees?",
+      description:
+        "I shortlisted a few colleges with different fees and average packages. What is a sensible way to compare value before finalizing?",
+      user: demoUser._id,
+      answers: [
+        {
+          text: "Start with total four-year cost, then compare average package, internship access, location, and course fit. A lower-fee college with decent placements can be better value than a higher-fee college with only a small placement advantage.",
+          user: demoUser._id
+        }
+      ]
+    },
+    {
+      title: "Can I use predictor results as final admission advice?",
+      description:
+        "The predictor shows colleges for my rank. Should I treat the recommendations as guaranteed admission options?",
+      user: demoUser._id,
+      answers: [
+        {
+          text: "Use predictor results as a shortlist, not a guarantee. Actual cutoffs change every year by category, branch, seat matrix, and counselling round.",
+          user: demoUser._id
+        }
+      ]
+    }
+  ]);
+
+  console.log(`Seeded ${colleges.length} colleges, sample discussions, and demo user demo@collegehub.dev / Password123`);
   await mongoose.connection.close();
 };
 

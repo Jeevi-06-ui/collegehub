@@ -119,6 +119,20 @@ const collegeSchema = new mongoose.Schema(
         default: []
       }
     },
+    cutoffs: {
+      KCET: {
+        type: Number,
+        min: 1
+      },
+      COMEDK: {
+        type: Number,
+        min: 1
+      },
+      JEE: {
+        type: Number,
+        min: 1
+      }
+    },
     reviews: {
       type: [reviewSchema],
       default: []

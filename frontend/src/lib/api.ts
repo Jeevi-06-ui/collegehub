@@ -6,10 +6,14 @@ import type {
   CollegeQuery,
   CollegeSummary,
   ComparisonResponse,
-  ProfileResponse
+  Exam,
+  ProfileResponse,
+  PredictorResponse,
+  QuestionDetailResponse,
+  QuestionListResponse
 } from "@/lib/types";
 
-const cleanParams = (params: CollegeQuery = {}) =>
+const cleanParams = (params: Record<string, unknown> = {}) =>
   Object.fromEntries(
     Object.entries(params).filter(([, value]) => value !== "" && value !== undefined && value !== null && value !== "all")
   );
@@ -63,6 +67,36 @@ export const compareApi = {
   },
   saveComparison: async (payload: { collegeIds: string[]; title?: string }) => {
     const response = await apiClient.post<ProfileResponse>("/save/comparison", payload);
+    return response.data;
+  }
+};
+
+export const predictorApi = {
+  predict: async (payload: { exam: Exam; rank: number }) => {
+    const response = await apiClient.post<PredictorResponse>("/predictor", payload);
+    return response.data;
+  }
+};
+
+export const questionApi = {
+  getQuestions: async (params: { search?: string; page?: number; limit?: number } = {}) => {
+    const response = await apiClient.get<QuestionListResponse>("/questions", {
+      params: cleanParams(params)
+    });
+    return response.data;
+  },
+  createQuestion: async (payload: { title: string; description: string }) => {
+    const response = await apiClient.post<QuestionDetailResponse>("/questions", payload);
+    return response.data;
+  },
+  getQuestion: async (id: string) => {
+    const response = await apiClient.get<QuestionDetailResponse>(`/questions/${id}`);
+    return response.data;
+  },
+  answerQuestion: async (payload: { id: string; text: string }) => {
+    const response = await apiClient.post<QuestionDetailResponse>(`/questions/${payload.id}/answer`, {
+      text: payload.text
+    });
     return response.data;
   }
 };
