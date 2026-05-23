@@ -35,6 +35,12 @@ export type College = {
     COMEDK?: number;
     JEE?: number;
   };
+  feeStructure?: {
+    KCET?: number;
+    COMEDK?: number;
+    JEE?: number;
+    management?: number;
+  };
   reviews: Review[];
   createdAt: string;
   updatedAt?: string;
@@ -42,7 +48,7 @@ export type College = {
 
 export type CollegeSummary = Pick<
   College,
-  "_id" | "name" | "location" | "image" | "rating" | "fees" | "placements" | "courses"
+  "_id" | "name" | "location" | "image" | "rating" | "fees" | "placements" | "courses" | "feeStructure"
 >;
 
 export type Pagination = {

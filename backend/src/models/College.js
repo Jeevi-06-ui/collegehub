@@ -133,6 +133,24 @@ const collegeSchema = new mongoose.Schema(
         min: 1
       }
     },
+    feeStructure: {
+      KCET: {
+        type: Number,
+        min: 0
+      },
+      COMEDK: {
+        type: Number,
+        min: 0
+      },
+      JEE: {
+        type: Number,
+        min: 0
+      },
+      management: {
+        type: Number,
+        min: 0
+      }
+    },
     reviews: {
       type: [reviewSchema],
       default: []

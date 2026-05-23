@@ -109,6 +109,7 @@ export default function CollegeDetailPage() {
               <TabsList className="w-full justify-start overflow-x-auto">
                 <TabsTrigger value="overview">Overview</TabsTrigger>
                 <TabsTrigger value="courses">Courses</TabsTrigger>
+                <TabsTrigger value="fees">Fees</TabsTrigger>
                 <TabsTrigger value="placements">Placements</TabsTrigger>
                 <TabsTrigger value="reviews">Reviews</TabsTrigger>
               </TabsList>
@@ -150,6 +151,22 @@ export default function CollegeDetailPage() {
                         </div>
                       </div>
                     ))}
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              <TabsContent value="fees">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Fee structure</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      <FeeItem label="KCET" value={college.feeStructure?.KCET} note="Karnataka colleges only" />
+                      <FeeItem label="COMEDK" value={college.feeStructure?.COMEDK} note="Karnataka colleges only" />
+                      <FeeItem label="JEE" value={college.feeStructure?.JEE} note="All supported colleges" />
+                      <FeeItem label="Management quota" value={college.feeStructure?.management} note="Varies by college" />
+                    </div>
                   </CardContent>
                 </Card>
               </TabsContent>
@@ -247,6 +264,16 @@ function Stat({
       <Icon className="mb-2 h-4 w-4 text-blue-600" />
       <p className="text-sm text-slate-500">{label}</p>
       <p className="mt-1 font-semibold text-slate-950">{value}</p>
+    </div>
+  );
+}
+
+function FeeItem({ label, value, note }: { label: string; value?: number; note: string }) {
+  return (
+    <div className="rounded-md border bg-slate-50 p-4">
+      <p className="text-sm text-slate-500">{label}</p>
+      <p className="mt-1 text-lg font-semibold text-slate-950">{value ? formatCurrency(value) : "Not applicable"}</p>
+      <p className="mt-1 text-xs text-slate-500">{note}</p>
     </div>
   );
 }

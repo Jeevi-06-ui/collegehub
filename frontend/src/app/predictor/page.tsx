@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import { usePredictor } from "@/hooks/use-predictor";
 import { getApiErrorMessage } from "@/lib/api-client";
+import { formatCurrency } from "@/lib/format";
 import type { Exam } from "@/lib/types";
 
 const exams: Exam[] = ["KCET", "COMEDK", "JEE"];
@@ -111,7 +112,18 @@ export default function PredictorPage() {
               </div>
               <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
                 {predictor.data.data.map((college) => (
-                  <CollegeCard key={college._id} college={college} />
+                  <div key={college._id} className="space-y-3">
+                    <CollegeCard college={college} />
+                    <div className="rounded-lg border bg-white p-3 text-sm shadow-sm">
+                      <p className="font-semibold text-slate-950">
+                        {predictor.data.exam} fee:{" "}
+                        {formatCurrency(college.feeStructure?.[predictor.data.exam] ?? college.fees)}
+                      </p>
+                      <p className="mt-1 text-slate-600">
+                        Management quota: {formatCurrency(college.feeStructure?.management ?? college.fees)}
+                      </p>
+                    </div>
+                  </div>
                 ))}
               </div>
             </>

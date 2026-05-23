@@ -164,6 +164,17 @@ const buildCutoffs = (rating, index) => {
   };
 };
 
+const buildFeeStructure = (state, index) => {
+  const isKarnataka = state === "Karnataka";
+
+  return {
+    KCET: isKarnataka ? 100000 : undefined,
+    COMEDK: isKarnataka ? 300000 : undefined,
+    JEE: 100000,
+    management: 400000 + (index % 10) * 25000
+  };
+};
+
 const buildCollege = (row, index) => {
   const [name, city, state, fees, rating, averagePackage, highestPackage, courseNames] = row;
   const recruiterPool = recruiterPools[index % recruiterPools.length];
@@ -186,6 +197,7 @@ const buildCollege = (row, index) => {
       topRecruiters: recruiterPool
     },
     cutoffs: buildCutoffs(rating, index),
+    feeStructure: buildFeeStructure(state, index),
     reviews: reviews.map((review, reviewIndex) => ({
       ...review,
       rating: Math.min(5, Number((review.rating + (rating - 4.1) * 0.25 - reviewIndex * 0.05).toFixed(1)))
