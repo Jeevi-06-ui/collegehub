@@ -4,7 +4,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { authApi } from "@/lib/api";
-import { getApiErrorMessage } from "@/lib/api-client";
+import { clearAuthToken, getApiErrorMessage, setAuthToken } from "@/lib/api-client";
 import type { User } from "@/lib/types";
 
 type Credentials = {
@@ -55,6 +55,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       login: async (payload) => {
         try {
           const response = await authApi.login(payload);
+          setAuthToken(response.token);
           setUser(response.user);
           queryClient.setQueryData(["profile"], { success: true, user: response.user });
           toast.success("Welcome back");
@@ -67,6 +68,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       signup: async (payload) => {
         try {
           const response = await authApi.signup(payload);
+          setAuthToken(response.token);
           setUser(response.user);
           queryClient.setQueryData(["profile"], { success: true, user: response.user });
           toast.success("Account created");
@@ -78,6 +80,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       },
       logout: async () => {
         await authApi.logout();
+        clearAuthToken();
         setUser(null);
         queryClient.removeQueries({ queryKey: ["profile"] });
         toast.success("Logged out");
